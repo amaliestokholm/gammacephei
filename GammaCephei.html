@@ -11791,14 +11791,13 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Stellar parameters found in the literature</span>
 <span class="n">pi</span> <span class="o">=</span> <span class="mf">70.91</span>  <span class="c1"># mas. From Hipparcos, new estimates</span>
-
 
 <span class="c1"># Colors from SIMBAD</span>
 <span class="n">U</span> <span class="o">=</span> <span class="mf">5.190</span>
@@ -11810,8 +11809,16 @@ div#notebook {
 <span class="n">H</span> <span class="o">=</span> <span class="mf">1.19</span>
 <span class="n">K</span> <span class="o">=</span> <span class="mf">1.04</span>
 
-<span class="c1"># Metallicities from the literature: here the lowest, median, and highest value since 1990.</span>
+<span class="c1"># Ref: Jofre et al 2015</span>
+<span class="n">logg</span> <span class="o">=</span> <span class="mf">3.18</span>  <span class="c1"># logg from Jofre et al 2015</span>
+<span class="n">teff_ref</span> <span class="o">=</span> <span class="mi">4794</span>
+
+<span class="c1"># Metallicities from the literature: here the lowest (from ref), median, and highest value since 1990.</span>
 <span class="n">FeHs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.17</span><span class="p">]</span>
+
+<span class="c1"># Solar values from Prsa et al 2016</span>
+<span class="n">teff_sun</span> <span class="o">=</span> <span class="mi">5772</span>
+<span class="n">logg_sun</span> <span class="o">=</span> <span class="mf">4.43</span>
 </pre></div>
 
 </div>
@@ -11821,7 +11828,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Distance</span>
@@ -11854,7 +11861,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Effective temperature</span>
@@ -11868,7 +11875,6 @@ div#notebook {
     <span class="n">teff</span> <span class="o">=</span> <span class="mi">5040</span> <span class="o">/</span> <span class="n">theta</span>
     <span class="n">teffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">teff</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">teff</span>
-
 
 <span class="k">def</span> <span class="nf">print_teff</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">teff</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Effective temperature from </span><span class="si">%s</span><span class="s1"> is </span><span class="si">%.0f</span><span class="s1"> +/- </span><span class="si">%.0f</span><span class="s1"> K&#39;</span>
@@ -11915,6 +11921,7 @@ div#notebook {
         <span class="n">teff_jh</span> <span class="o">=</span> <span class="n">alonso1999</span><span class="p">(</span><span class="n">J</span> <span class="o">-</span> <span class="n">H</span><span class="p">,</span> <span class="n">FeH</span><span class="p">,</span> <span class="n">a_jh</span><span class="p">)</span>
         <span class="n">print_teff</span><span class="p">(</span><span class="s1">&#39;J-H&#39;</span><span class="p">,</span> <span class="n">teff_jh</span><span class="p">,</span> <span class="n">sigma_jh</span><span class="p">)</span>
 
+        
     <span class="n">teffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">teffs</span><span class="p">)</span>
     <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">teffs</span><span class="p">)</span>
     <span class="n">median</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">teffs</span><span class="p">)</span>
@@ -11922,6 +11929,7 @@ div#notebook {
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The mean of all calculated effective temperatures is </span><span class="si">%.0f</span><span class="s1"> K&#39;</span> <span class="o">%</span> <span class="n">mean</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The median of all calculated effective temperatures is </span><span class="si">%.0f</span><span class="s1"> K&#39;</span> <span class="o">%</span> <span class="n">median</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The std of all calculated effective temperatures is </span><span class="si">%.0f</span><span class="s1"> K&#39;</span> <span class="o">%</span> <span class="n">std</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The reference temperature from Jofre et al 2015 is </span><span class="si">%.0f</span><span class="s1"> K&#39;</span> <span class="o">%</span> <span class="n">teff_ref</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -11972,6 +11980,65 @@ The mean of all calculated effective temperatures is 4943 K
 The median of all calculated effective temperatures is 4872 K
 The std of all calculated effective temperatures is 172 K
 
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Bolometric correction</span>
+<span class="c1"># Using Table 1 in Torres 2010, we get a bolometric correction from Teff</span>
+<span class="k">def</span> <span class="nf">BC</span><span class="p">(</span><span class="n">teff</span><span class="p">):</span>
+    <span class="n">logteff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">teff</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">logteff</span> <span class="o">&lt;</span> <span class="mf">3.70</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.190537291496456E+05</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mf">0.155144866764412E+05</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.421278819301717E+04</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mf">0.381476328422343E+03</span>
+    <span class="n">BCV</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">logteff</span> <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="n">logteff</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">d</span> <span class="o">*</span> <span class="n">logteff</span> <span class="o">**</span> <span class="mi">3</span>
+    <span class="k">return</span> <span class="n">BCV</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Surface gravity</span>
+<span class="n">BC</span> <span class="o">=</span> <span class="n">BC</span><span class="p">(</span><span class="n">median</span><span class="p">)</span>
+<span class="n">logM</span> <span class="o">=</span> <span class="p">(</span><span class="n">logg</span> <span class="o">-</span> <span class="n">logg_sun</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">median</span> <span class="o">/</span> <span class="n">teff_sun</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">V</span> <span class="o">-</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">BC</span>
+        <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">))</span> <span class="o">-</span> <span class="mf">0.12</span><span class="p">)</span>
+<span class="n">mass</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">logM</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The mass of the star is </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">mass</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The mass of the star is 1.20
 </pre>
 </div>
 </div>
