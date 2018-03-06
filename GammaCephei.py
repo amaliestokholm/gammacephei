@@ -1,21 +1,13 @@
-
 # coding: utf-8
 
 # # Gamma Cephei
-
 # Gamma Cephei is a spectroscopic binary with a planet of minimum mass of 1.7 sin(i) jupiter mass.
-# 
 # Gamma Cephei A is a K1 subgiant star, while Gamma Cephei B is a red dwarf.
-# 
-
-# In[1]:
-
 
 import numpy as np
 
 # Stellar parameters found in the literature
 pi = 70.91  # mas. From Hipparcos, new estimates
-
 
 # Colors from SIMBAD
 U = 5.190
@@ -37,17 +29,9 @@ M = 1  # in solar masses
 teff_sun = 5772
 logg_sun = 4.43
 
-
-# In[ ]:
-
-
 # Distance
 d = 1 / (pi * 10 ** (-3))
 print('The distance is %.3f pc' % d)
-
-
-# In[ ]:
-
 
 # Effective temperature
 # We assume a metallicity similar to the Sun and use Alonso et al. 1999
@@ -117,12 +101,7 @@ for FeH in FeHs:
     print('The std of all calculated effective temperatures is %.0f K' % std)
     print('')
 
-
-# In[ ]:
-
-
 # Surface gravity
 logg_ratio = np.log10(M) + 4 * np.log10(median / teff_sun) + 0.4 * V + 0.4 * BC + 2 * np.log10(pi) + 0.12
 logg = logg_ratio * logg_sun
 print('The surface gravity is %.1f' % logg)
-
