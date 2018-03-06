@@ -8,7 +8,7 @@
 # Gamma Cephei A is a K1 subgiant star, while Gamma Cephei B is a red dwarf.
 # 
 
-# In[13]:
+# In[1]:
 
 
 import numpy as np
@@ -30,8 +30,15 @@ K = 1.04
 # Metallicities from the literature: here the lowest, median, and highest value since 1990.
 FeHs = [-0.05, 0.04, 0.17]
 
+BC = -0.24  # Estimate from Kaler 1989
+M = 1  # in solar masses
 
-# In[14]:
+# Solar values from Prsa et al 2016
+teff_sun = 5772
+logg_sun = 4.43
+
+
+# In[ ]:
 
 
 # Distance
@@ -39,7 +46,7 @@ d = 1 / (pi * 10 ** (-3))
 print('The distance is %.3f pc' % d)
 
 
-# In[16]:
+# In[ ]:
 
 
 # Effective temperature
@@ -100,6 +107,7 @@ for FeH in FeHs:
         teff_jh = alonso1999(J - H, FeH, a_jh)
         print_teff('J-H', teff_jh, sigma_jh)
 
+        
     teffs = np.asarray(teffs)
     mean = np.mean(teffs)
     median = np.median(teffs)
@@ -108,4 +116,13 @@ for FeH in FeHs:
     print('The median of all calculated effective temperatures is %.0f K' % median)
     print('The std of all calculated effective temperatures is %.0f K' % std)
     print('')
+
+
+# In[ ]:
+
+
+# Surface gravity
+logg_ratio = np.log10(M) + 4 * np.log10(median / teff_sun) + 0.4 * V + 0.4 * BC + 2 * np.log10(pi) + 0.12
+logg = logg_ratio * logg_sun
+print('The surface gravity is %.1f' % logg)
 
