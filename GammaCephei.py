@@ -19,15 +19,17 @@ J = 1.66
 H = 1.19
 K = 1.04
 
-# Metallicities from the literature: here the lowest, median, and highest value since 1990.
-FeHs = [-0.05, 0.04, 0.17]
+# Ref: Jofre et al 2015
+logg = 3.18  # logg from Jofre et al 2015
+teff_ref = 4794
 
-BC = -0.24  # Estimate from Kaler 1989
-M = 1  # in solar masses
+# Metallicities from the literature: here the lowest (from ref), median, and highest value since 1990.
+FeHs = [-0.05, 0.04, 0.17]
 
 # Solar values from Prsa et al 2016
 teff_sun = 5772
 logg_sun = 4.43
+
 
 # Distance
 d = 1 / (pi * 10 ** (-3))
@@ -99,9 +101,25 @@ for FeH in FeHs:
     print('The mean of all calculated effective temperatures is %.0f K' % mean)
     print('The median of all calculated effective temperatures is %.0f K' % median)
     print('The std of all calculated effective temperatures is %.0f K' % std)
+    print('The reference temperature from Jofre et al 2015 is %.0f K' % teff_ref)
     print('')
 
+
+# Bolometric correction
+# Using Table 1 in Torres 2010, we get a bolometric correction from Teff
+def BC(teff):
+    logteff = np.log10(teff)
+    if logteff < 3.70:
+        a = -0.190537291496456E+05
+        b = 0.155144866764412E+05
+        c = -0.421278819301717E+04
+        d = 0.381476328422343E+03
+    BCV = a + b * logteff + c * logteff ** 2 + d * logteff ** 3
+    return BCV
+
 # Surface gravity
-logg_ratio = np.log10(M) + 4 * np.log10(median / teff_sun) + 0.4 * V + 0.4 * BC + 2 * np.log10(pi) + 0.12
-logg = logg_ratio * logg_sun
-print('The surface gravity is %.1f' % logg)
+BC = BC(median)
+logM = (logg - logg_sun - 4 * np.log10(median / teff_sun) - 0.4 * V - 0.4 * BC
+        - 2 * np.log10(pi * 10 ** (-3)) - 0.12)
+mass = 10 ** logM
+print('The mass of the star is %.2f' % mass)
